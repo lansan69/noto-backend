@@ -15,7 +15,7 @@ def test_create_transcript_test(monkeypatch):
         Mock(return_value=Mock(text="fake transcribed text", status="completed"))
     )
 
-    headers = {"user-id": "alan", "username":"alan", "host": "example.com"}
+    headers = {"user-id": "alan", "username": "alan", "host": "example.com"}
     files = {"audio_file": ("test.mp3", b"fake audio bytes", "audio/mp3")}
     response = client.post("/transcript/", headers=headers, files=files)
     assert response.status_code == 200

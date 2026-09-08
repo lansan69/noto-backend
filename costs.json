@@ -1,0 +1,36 @@
+{
+ "last_update":"06-09-2026",
+  "assemblyai": {
+    "transcript": {
+        "reference":{
+            "unity": "second", 
+            "base":3600
+        },
+        "models": {
+            "universal-3-5-pro": { "price": 0.21 },
+            "universal-2": { "price": 0.15 }
+        },
+        "add_ons": {
+            "diarization": { "price": 0.02 },
+            "prompting": { "price": 0.05 }
+        }
+    }
+  },
+  "qwen": {
+    "analysis":{
+         "reference":{
+            "unity": "token", 
+            "base":1000000
+        },
+        "model":{
+            "qwen3.7-flash": {
+                "price": [
+                  { "max": 32000, "input": 0.03, "cached_input": 0.006, "output": 0.13 },
+                  { "max": 256000, "input": 0.10, "cached_input": 0.02, "output": 0.40 },
+                  { "max": 1000000, "input": 0.20, "cached_input": 0.04, "output": 0.80 }
+                ]
+            }
+        }
+    }
+  }
+}
