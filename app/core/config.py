@@ -7,7 +7,12 @@ class Settings(BaseSettings):
 
     # Qwen models
     ALIBABA_API_KEY: str = Field(default="", description="Alibaba API Key")
-
+    ALIBABA_OPENAI_COMPATIBLE_ENDPOINT: str = Field(default="", description="Alibaba OpenAI Compatible Endpoint")
+    ALIBABA_DASHCOPE: str = Field(default="", description="Alibaba DASHSCOPE Endpoint")
+    
+    # OpenRouter
+    OPENROUTER_API_KEY: str = Field(default="", description="OpenRouter API Key")
+    
     # OSS
     ALIBABA_OSS_BUCKET: str = Field(default="", description="Alibaba OSS Bucket Name")
     ALIBABA_OSS_ENDPOINT: str = Field(default="", description="Alibaba OSS Endpoint")
@@ -18,6 +23,9 @@ class Settings(BaseSettings):
     SUPABASE_URL: str = Field(default="", description="Supabase URL")
     SUPABASE_JWS_URL: str = Field(default="", description="Supabase JWS URL")
     
+    # Logging
+    LOG_LEVEL: str = Field(default="INFO", description="Logging level")
+
     # Configuration for Pydantic settings
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
