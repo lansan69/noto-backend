@@ -63,15 +63,18 @@ noto-backend/
 │   │       └── application/
 │   │           └── take_notes.py     # Fábrica del caso de uso + system prompt del modelo
 │   │
+│   ├── docs/                         # Documentación de referencia (costos, ejemplos) — ver §8
+│   │   ├── costs.json
+│   │   └── examples/
+│   │       ├── transcript/example.json
+│   │       └── notes/note2.json
+│   │
 │   └── tests/
 │       └── test_transcript.py        # Desactualizado — ver §5
 ```
 
 ### 1.1 Cosas a tener en cuenta
 
-- **`test.py` en la raíz de `app/`** es un script de desarrollo que se corre manualmente
-  (`python -m app.test`), pega directo a la API de Alibaba y escribe el resultado en
-  `note2.json`. No forma parte de la suite de pytest.
 - **`app/tests/test_transcript.py` está desactualizado**: hace `monkeypatch` sobre
   `transcript_module.transcriber` y pega a `POST /transcript/`, pero ese atributo y esa ruta ya
   no existen — el endpoint actual es `POST /notes/` (`app/api/v1/notes/notes.py`) y el
@@ -79,8 +82,6 @@ noto-backend/
 - **`note_persistence_datasource.py` no está implementado** (`save_transcript`/`save_notes` son
   `pass`) — por ahora las notas generadas no se persisten en Supabase, solo se devuelven en la
   respuesta HTTP.
-- Los archivos `example.json`, `note.json`, `note2.json` en la raíz son salidas de prueba del
-  script `test.py`, no artefactos del proyecto.
 
 ---
 
@@ -305,12 +306,29 @@ para que las funciones de `deps.py` de cada feature los recojan por request.
 
 ---
 
-## 8. Pendientes conocidos
+## 8. `app/docs/` — Documentación de referencia
+
+Carpeta con documentación de datos (no es documentación de API ni se sirve por HTTP):
+
+- **`costs.json`** — tarifas de referencia de los proveedores usados en el pipeline:
+  - `assemblyai.transcript`: precio por segundo de audio (base de 3600 s) por modelo
+    (`universal-3-5-pro`, `universal-2`) más add-ons (`diarization`, `prompting`).
+  - `qwen.analysis`: precio por token (base de 1,000,000) del modelo `qwen3.7-flash`, escalonado
+    por tamaño de contexto (`input`, `cached_input`, `output` para 32k/256k/1M tokens).
+  - Incluye `last_update` para saber qué tan vigentes son las cifras.
+- **`examples/transcript/example.json`** — respuesta cruda de ejemplo de AssemblyAI
+  (`TranscriptResultModel`), útil como referencia de forma/campos sin tener que disparar una
+  transcripción real.
+- **`examples/notes/note2.json`** — salida de ejemplo de `NotesModel` ya generada por Qwen
+  (`title`, `notes_column` con sus bloques, `summary`, `action_items`, etc.), útil como
+  referencia del formato que debe devolver `POST /notes/`.
+
+---
+
+## 9. Pendientes conocidos
 
 - Conectar `settings.LOG_LEVEL` a `setup_logging()` (ver §5).
 - Implementar `NotePersistentDatasource.save_transcript` / `save_notes` (persistencia en
   Supabase — actualmente son no-ops).
 - Actualizar o eliminar `app/tests/test_transcript.py`, que apunta a una ruta y un atributo que
   ya no existen.
-- Decidir qué hacer con `app/test.py` y los JSON de prueba sueltos en la raíz
-  (`example.json`, `note.json`, `note2.json`) — son artefactos de desarrollo manual.
