@@ -1,7 +1,7 @@
 from unittest.mock import Mock
 from fastapi.testclient import TestClient
 from app.main import app
-from app.api.v1.transcript import transcript as transcript_module
+from app.api.v1.notes import notes as transcript_module
 
 client = TestClient(app)
 
