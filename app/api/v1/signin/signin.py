@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.features.auth.domain.usecases.sign_user import SignUserIn
 from app.features.auth.domain.exceptions import InvalidCredentialsError
-from app.features.auth.application.sign_user_in import get_sign_user_in_use_case
+from app.api.v1.signin.deps import get_sign_user_in_use_case
 from app.api.schemas.signin.signin_schemas import SignInRequest
 
 signin_router = APIRouter()  
