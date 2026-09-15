@@ -1,13 +1,13 @@
-# data/repository/notes_repository_impl.py
-from app.features.notes.data.datasource.notes_datasource import NotesDatasource
+# data/repository/alibaba_notes_repository_impl.py
+from app.features.notes.data.datasource.alibaba_notes_datasource import AlibabaNotesDatasource
 from app.features.notes.domain.repository.notes_repository import NotesRepository
 from app.features.notes.domain.entities.notes_entities import NoteDraft, BlockDraft, BlockType
 from app.features.notes.domain.exceptions import AnalysisError
 from app.features.notes.data.models.notes_models import NotesModel, Block
 from app.features.notes.domain.entities.transcript_entities import TranscriptResult
 
-class NotesRepositoryImpl(NotesRepository):
-    def __init__(self, datasource: NotesDatasource):
+class AlibabaNotesRepositoryImpl(NotesRepository):
+    def __init__(self, datasource: AlibabaNotesDatasource):
         self._datasource = datasource
 
     def _block_to_domain(self, block: Block) -> BlockDraft:

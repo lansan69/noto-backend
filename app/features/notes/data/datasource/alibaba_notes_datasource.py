@@ -1,4 +1,4 @@
-# data/datasources/notes_datasource.py
+# data/datasources/alibaba_notes_datasource.py
 
 import logging
 from app.features.notes.domain.entities.transcript_entities import TranscriptResult, SummaryElement, ActionItem, Utterance
@@ -8,7 +8,7 @@ from openai import AsyncOpenAI
 # Initialize logger
 logger = logging.getLogger(__name__)
 
-class NotesDatasource:
+class AlibabaNotesDatasource:
     def __init__(self, openai_client: AsyncOpenAI, alibaba_models: list[str]):
         self._openai_client = openai_client
         self.alibaba_models = alibaba_models

@@ -1,12 +1,13 @@
-# data/supabase/user_validation_impl.py
-from app.features.notes.data.datasource.transcript_datasource import TranscriptionDatasource
+# data/repository/transcript_repository_impl.py
+from app.features.notes.data.datasource.transcript_datasource import AssemblyAITranscriptionDatasource, GroqTranscriptionDatasource
 from app.features.notes.domain.repository.transcript import TranscriptRepository
 from app.features.notes.domain.exceptions import TranscriptError
-from app.features.notes.data.models.transcript_models import TranscriptResultModel
+from app.features.notes.data.models.assemblyai_models import TranscriptResultModel
+from app.features.notes.data.models.groq_models import GroqTranscriptResponse
 from app.features.notes.domain.entities.transcript_entities import TranscriptResult, Utterance, SummaryElement, ActionItem
 
-class TranscriptResultImpl(TranscriptRepository):
-    def __init__(self, datasource: TranscriptionDatasource):
+class AssemblyAITranscriptResultImpl(TranscriptRepository):
+    def __init__(self, datasource: AssemblyAITranscriptionDatasource):
         self._datasource = datasource
     
     def _to_domain(self, model: TranscriptResultModel) -> TranscriptResult:
@@ -42,7 +43,40 @@ class TranscriptResultImpl(TranscriptRepository):
     
     async def create_transcript(self, audio_bytes: bytes) -> TranscriptResult:
         try:
-            model = await self._datasource.create_transcript(audio_bytes=audio_bytes)
+            model = await self._datasource.create_transcript_assemblyai(audio_bytes=audio_bytes)
+            return self._to_domain(model)
+        except TranscriptError:
+            raise
+        except Exception as e:
+            raise TranscriptError(f"Failed to transcribe audio: {str(e)}") from e
+
+class GroqTranscriptResultImpl(TranscriptRepository):
+    def __init__(self, datasource: GroqTranscriptionDatasource):
+        self._datasource = datasource
+    
+    def _to_ms(self, seconds: float) -> int:
+        return int(seconds * 1000)
+
+    def _to_domain(self, model: GroqTranscriptResponse) -> TranscriptResult:
+        return TranscriptResult(
+            language_code="",
+            summary=[],
+            action_items=[],
+            confidence=0.0,
+            utterances=list(Utterance(
+                    speaker= "",
+                    text=u.text,
+                    confidence=0.0,
+                    start=self._to_ms(u.start),
+                    end=self._to_ms(u.end)
+                ) for u in model.utterances or []
+            ),
+            text="".join(u.text for u in model.utterances or [])
+        )
+    
+    async def create_transcript(self, audio_bytes: bytes) -> TranscriptResult:
+        try:
+            model = await self._datasource.create_transcript_groq(audio_bytes=audio_bytes)
             return self._to_domain(model)
         except TranscriptError:
             raise

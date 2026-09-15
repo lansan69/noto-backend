@@ -34,7 +34,10 @@ async def lifespan(app: FastAPI):
         base_url = settings.ALIBABA_OPENAI_COMPATIBLE_ENDPOINT
     )
     app.state.alibaba_models = models.ALIBABA_MODELS
-    
+    app.state.groq_client = AsyncOpenAI(
+        base_url=settings.GROQ_BASE_URL,
+        api_key=settings.GROQ_API_KEY
+    )
     yield
 
 app = FastAPI(lifespan=lifespan)

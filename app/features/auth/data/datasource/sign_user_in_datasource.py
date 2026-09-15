@@ -1,7 +1,7 @@
-# data/datasources/user_validation_datasource.py
+# data/datasources/sign_user_in_datasource.py
 from supabase import AsyncClient
 
-class UserValidationDatasource:
+class SupabaseUserValidationDatasource:
     def __init__(self, client: AsyncClient):
         self._client = client
 

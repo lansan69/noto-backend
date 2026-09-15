@@ -1,8 +1,8 @@
 from supabase import AsyncClient
-from app.features.notes.data.models.transcript_models import TranscriptResultModel
+from app.features.notes.data.models.assemblyai_models import TranscriptResultModel
 from app.features.notes.data.models.notes_models import NotesModel
 
-class NotePersistentDatasource:
+class SupabaseNotePersistenceDatasource:
     def __init__(self, supabase_client: AsyncClient):
         self.supabase_client = supabase_client
     

@@ -23,6 +23,10 @@ class Settings(BaseSettings):
     SUPABASE_URL: str = Field(default="", description="Supabase URL")
     SUPABASE_JWS_URL: str = Field(default="", description="Supabase JWS URL")
     
+    # Groq
+    GROQ_API_KEY: str = Field(default="", description="Groq Api Key")
+    GROQ_BASE_URL: str = Field(default="", description="Groq OpenAI compatible URL")
+    
     # Logging
     LOG_LEVEL: str = Field(default="INFO", description="Logging level")
 
